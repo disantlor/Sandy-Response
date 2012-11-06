@@ -2,7 +2,7 @@
 
 define('SEC_IN_DAY', 60*60*24);
 
-$conn = new PDO('mysql:host=localhost;dbname=sandy', 'root', '');
+$conn = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASS);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // clear any aider messages that we've received that are older than an hour

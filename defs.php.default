@@ -1,0 +1,7 @@
+<?php
+
+define('API_KEY', 'AN_API_KEY_FOR_GET_REQUESTS');
+
+// example: user@email.com:password
+define('MC_AUTH', 'MOBILE_COMMONS_AUTH_STRING');
+

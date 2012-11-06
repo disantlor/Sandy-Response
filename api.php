@@ -16,7 +16,7 @@
  */
 function geocode($address, $neighborhood) {
   $url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=';
-  $url.= urlencode("$address, $neighborhood");
+  $url.= urlencode("$address, $neighborhood, NY");
 
   $response = json_decode(file_get_contents($url))->results[0];
 

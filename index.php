@@ -28,7 +28,6 @@ require_once 'api.php';
 require_once 'db.php';
 require_once 'lang.php';
 
-
 // Aider and aidee keyword mapping so we know whether a keyword is for an aider flow or aidee flow.
 //
 // Note: The two sub-arrays should match order. In other words, $keywords['aidee'][0] should be the
@@ -38,11 +37,13 @@ $keywords = array(
     'pump',
     'cleanup',
     'supplies',
+    'medical',
   ),
   'aider' => array(
     'pumping',
     'cleaning',
     'distro',
+    'firstaid',
   ),
 );
 
@@ -71,6 +72,9 @@ if (in_array(get_keyword(), $keywords['aidee'])) {
   switch(create_request($request)) {
     case FLAG_NEW_REQUEST:
       echo $responses['aidee_new_request'];
+      if ($request->type == 'medical') {
+        echo ' Please call 911 for emergencies.';
+      }
       break;
     case FLAG_RECENTLY_HELPED:
       echo $responses['aidee_recently_helped'];
@@ -141,6 +145,10 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
       // log that we sent that response
       log_response_sent($_GET['phone'], $response->id);
 
+      if ($type == 'supplies') {
+        echo 'Supply needed: ' . get_supplies($response->phone) . '. ';
+      }
+
       echo strtr($responses['aider_response'], array(
         ':phone' => format_phone($response->phone),
         ':address' => $response->address,
@@ -164,7 +172,12 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
 }
 // miserable failure
 else {
-  echo $responses['unrecognized_keyword'];
+  if (is_aidee($_GET['phone'])) {
+    echo $responses['unrecognized_keyword_aidee'];
+  }
+  else {
+    echo $responses['unrecognized_keyword'];
+  }
 }
 
 /**

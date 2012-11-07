@@ -81,6 +81,11 @@ function get_keyword() {
     return $keyword;
   }
 
+  if (is_supply_request()) {
+    $keyword = 'supplies';
+    return $keyword;
+  }
+
   $mapping = array(
     'pump' => array(
       'pump',
@@ -90,6 +95,9 @@ function get_keyword() {
     ),
     'supplies' => array(
       'supplies',
+    ),
+    'medical' => array(
+      'medical',
     ),
     'pumping' => array(
       'pumping',
@@ -104,10 +112,14 @@ function get_keyword() {
       'distri',
       'dist',
     ),
+    'firstaid' => array(
+      'firstaid',
+      'first aid',
+    ),
   );
 
   $keyword = trim($_GET['keyword']);
-  if (empty($keyword)) {
+  if (empty($keyword) && !is_aidee($_GET['phone'])) {
     $keyword = get_recent_keyword($_GET['phone']);
     return $keyword;
   }
@@ -117,6 +129,7 @@ function get_keyword() {
       return $keyword;
     }
   }
+  return FALSE;
 }
 
 /**
@@ -143,4 +156,95 @@ function mc_post($url, $fields) {
   curl_close($ch);
 
   return simplexml_load_string($result);
+}
+
+/**
+ * Get the supplies needed by an aidee.
+ *
+ * @param string $phone
+ * 
+ * return string|bool needed supplies, FALSE if empty
+ */
+function get_supplies($phone) {
+  $url = 'https://secure.mcommons.com/api/profile';
+  $params = array(
+    'phone_number' => $phone,
+  );
+
+  $supplies = '';
+  $data = mc_post($url, $params);
+
+  foreach ($data->profile->custom_columns->custom_column as $column) {
+    $attributes = $column->attributes();
+    if ($attributes['name'] == 'Supplies needed') {
+      $supplies = trim((string) $column);
+    }
+  }
+
+  if (!empty($supplies)) {
+    return map_supplies($supplies);
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Map a user-inputted supply to a more peasant version
+ *
+ * @param string $supply
+ *
+ * @return string supply
+ */
+function map_supplies($supply) {
+  $supply = strtolower($supply);
+
+  $mapping = supply_map();
+  foreach ($mapping as $key => $type) {
+    if (in_array($supply, $type)) {
+      return $key;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * @return array supply map
+ */
+function supply_map() {
+  return array(
+    'food' => array(
+      'a',
+      'a.',
+      'food',
+    ),
+    'warm clothing' => array(
+      'b',
+      'b.',
+      'warm',
+      'clothing',
+      'warm clothing',
+    ),
+    'baby' => array(
+      'c',
+      'c.',
+      'baby',
+    ),
+  );
+
+}
+
+/**
+ * @return bool
+ */
+function is_supply_request() {
+  $arg = trim($_GET['args']);
+  foreach (supply_map() as $supply) {
+    foreach ($supply as $response) {
+      if (substr($arg, 0, strlen($response)) == $response) {
+        return TRUE;
+      }
+    }
+  }
+  return false;
 }

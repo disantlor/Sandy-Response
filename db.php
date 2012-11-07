@@ -197,12 +197,17 @@ function get_offset($phone, $increment = TRUE) {
   ));
   $offset = $stmt->fetchColumn();
 
-  if ($increment) {
-    $stmt = $conn->prepare('UPDATE aider_messages SET offset=offset+1 WHERE phone=:phone AND type=:type');
-    $stmt->execute(array(
-      ':phone' => $phone,
-      ':type' => $type,
-    ));
+  if ($increment !== FALSE) {
+    if (!is_int($increment)) {
+      $stmt = $conn->prepare('UPDATE aider_messages SET offset=offset+:increment WHERE phone=:phone AND type=:type');
+    }
+    else {
+      $stmt = $conn->prepare('UPDATE aider_messages SET offset=:increment WHERE phone=:phone AND type=:type');
+    }
+    $stmt->bindParam(':phone', $phone);
+    $stmt->bindParam(':type', $type);
+    $stmt->bindParam(':increment', $increment, PDO::PARAM_INT);
+    $stmt->execute();
   }
 
   return $offset;

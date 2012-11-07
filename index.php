@@ -163,7 +163,7 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
           break;
         case FLAG_NO_MORE_REQUESTS:
           echo $responses['aider_no_more_aidees'];
-          clear_log($_GET['phone']);
+          get_offset($_GET['phone'], 0);
           break;
       }
     }

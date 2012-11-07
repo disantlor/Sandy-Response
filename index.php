@@ -57,14 +57,8 @@ if (in_array(get_keyword(), $keywords['aidee'])) {
 
   $request->neighborhood = clean_neighborhood($_GET['profile_neighborhood']);
 
-  // set the address to both fields if they're filled out
-  $request->address = trim($_GET['profile_street1']);
-  if (!empty($_GET['profile_street2'])) {
-    $request->address .= ', ' . $_GET['profile_street2'];
-  }
-
   // normalize the address
-  $request->address = standardAddress($request->address);
+  $request->address = standardAddress(trim($_GET['profile_street_address']));
 
   // attempt to create the request in the DB, handling the response codes that get returned
   // from create_request(Request)

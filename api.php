@@ -7,6 +7,20 @@
  */
 
 /**
+ * Normalize an address to USPS format.
+ * 
+ * @param string $address
+ *
+ * @return string formatted address
+ */
+function standardAddress($address) {
+  require_once('AddressStandardizationSolution.php');
+  $standardizer = new AddressStandardizationSolution;
+  $address = $standardizer->AddressLineStandardization($address);
+  return $address;
+}
+
+/**
  * Gets the lat/long of an address (assuming the first result for now).
  *
  * @param string $address street address entered by the user

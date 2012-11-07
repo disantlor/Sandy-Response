@@ -15,8 +15,7 @@ $stmt = $conn->query($clear_query);
  * This should enforce the logic that no new request should be created if the
  * following is already found in the database (essentially a composite key
  * of these fields):
- * - lat
- * - lon
+ * - normalized address
  * - request type
  * - phone number
  *
@@ -82,11 +81,10 @@ function reset_helped($request) {
  */
 function request_exists($request) {
   global $conn;
-  $sql = 'SELECT * FROM requests WHERE lat=:lat AND lon=:lon AND type=:type AND phone=:phone';
+  $sql = 'SELECT * FROM requests WHERE address=:address AND type=:type AND phone=:phone';
   $stmt = $conn->prepare($sql);
   $stmt->execute(array(
-    ':lat' => $request->lat,
-    ':lon' => $request->lon,
+    ':address' => $request->address,
     ':type' => $request->type,
     ':phone' => $request->phone,
   ));
@@ -105,11 +103,9 @@ function request_exists($request) {
 function insert_request($request) {
   global $conn;
   $stmt = $conn->prepare('INSERT INTO requests
-    (lat, lon, type, phone, neighborhood, address)
-    VALUES(:lat, :lon, :type, :phone, :neighborhood, :address)');
+    (type, phone, neighborhood, address)
+    VALUES(:type, :phone, :neighborhood, :address)');
   $stmt->execute(array(
-    ':lat' => $request->lat,
-    ':lon' => $request->lon,
     ':type' => $request->type,
     ':phone' => $request->phone,
     ':neighborhood' => $request->neighborhood,
@@ -290,8 +286,6 @@ function is_aidee($phone) {
 }
 
 class Request {
-  public $lat;
-  public $lon;
   public $type;
   public $phone;
   public $neighborhood;

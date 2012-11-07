@@ -63,9 +63,8 @@ if (in_array(get_keyword(), $keywords['aidee'])) {
     $request->address .= ', ' . $_GET['profile_street2'];
   }
 
-  // we store requests by lat/lon for accuracy instead of street address
-  // Otherwise, we'd have to deal with things like (1 N Main St) vs (1 North Main Street)
-  list($request->lat, $request->lon) = geocode($request->address, $request->neighborhood);
+  // normalize the address
+  $request->address = standardAddress($request->address);
 
   // attempt to create the request in the DB, handling the response codes that get returned
   // from create_request(Request)
@@ -151,7 +150,7 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
 
       echo strtr($responses['aider_response'], array(
         ':phone' => format_phone($response->phone),
-        ':address' => $response->address,
+        ':address' => ucwords(strtolower($response->address)),
         ':type' => $type,
       ));
     }

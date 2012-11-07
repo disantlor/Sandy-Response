@@ -274,15 +274,19 @@ function get_recent_keyword($phone) {
  */
 function is_aidee($phone) {
   global $conn;
-  $stmt = $conn->prepare('SELECT * FROM requests WHERE phone=:phone');
+  $stmt = $conn->prepare('SELECT UNIX_TIMESTAMP(timestamp) FROM requests WHERE phone=:phone ORDER BY timestamp limit 1');
   $stmt->execute(array(
     ':phone' => $phone,
   ));
+  $aidee_time = $stmt->fetchColumn();
 
-  if ($stmt->fetch()) {
-    return TRUE;
-  }
-  return FALSE;
+  $stmt = $conn->prepare('SELECT UNIX_TIMESTAMP(timestamp) FROM aider_messages WHERE phone=:phone ORDER BY timestamp limit 1');
+  $stmt->execute(array(
+    ':phone' => $phone,
+  ));
+  $aider_time = $stmt->fetchColumn();
+
+  return $aidee_time > $aider_time;
 }
 
 class Request {

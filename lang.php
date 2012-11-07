@@ -20,4 +20,7 @@ $responses = array(
   'aidee_help_pending' => 'We already have this request in the system. No one has replied to help you yet, but please be patient!',
 
   'unrecognized_keyword' => 'We don\'t recognize that keyword. Please try again.',
+
+  'unrecognized_keyword_aidee' => 'Your request has been recorded already. Please be patient! We\'ll let you know when someone is on their way. Have others in need text SANDY to 69866.',
+
 );

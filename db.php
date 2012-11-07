@@ -255,6 +255,11 @@ function clear_log($phone) {
   ));
 }
 
+/**
+ * Get the last keyword that an aider used.
+ *
+ * @return string keyword
+ */
 function get_recent_keyword($phone) {
   global $conn;
   $stmt = $conn->prepare('SELECT type FROM aider_messages WHERE phone=:phone ORDER BY timestamp DESC LIMIT 1');
@@ -262,6 +267,26 @@ function get_recent_keyword($phone) {
     ':phone' => $phone,
   ));
   return map_type_reverse($stmt->fetchColumn());
+}
+
+/**
+ * Check if a phone number is an aidee.
+ *
+ * @param string $phone
+ *
+ * @return bool
+ */
+function is_aidee($phone) {
+  global $conn;
+  $stmt = $conn->prepare('SELECT * FROM requests WHERE phone=:phone');
+  $stmt->execute(array(
+    ':phone' => $phone,
+  ));
+
+  if ($stmt->fetch()) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 class Request {

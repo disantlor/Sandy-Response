@@ -3,7 +3,7 @@
 $responses = array(
   'aider_no_aidees' => 'There aren\'t unattended needs of this nature reported in your area currently. Pls spread the word about this resource! Have people text SANDY to 69866 w/ needs.',
 
-  'aider_helping' => 'Thank you for taking responsibility for this task. It will be taken off the need list. Reply CANCEL if you cannot help.',
+  'aider_helping' => 'Thank you for taking responsibility for this task. It will be taken off the need list.',
 
   'aider_try_again' => 'Sorry, we couldn\'t understand your response. Please start over by texting MUTUALAID to 69866.',
 

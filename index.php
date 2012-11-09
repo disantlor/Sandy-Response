@@ -38,12 +38,14 @@ $keywords = array(
     'cleanup',
     'supplies',
     'medical',
+    'repair',
   ),
   'aider' => array(
     'pumping',
     'cleaning',
     'distro',
     'firstaid',
+    'building',
   ),
 );
 
@@ -59,6 +61,15 @@ if (in_array(get_keyword(), $keywords['aidee'])) {
 
   // normalize the address
   $request->address = standardAddress(trim($_GET['profile_street_address']));
+
+  if ($request->type == 'supplies') {
+    $url = 'https://secure.mcommons.com/api/profile_update';
+    $params = array(
+      'phone_number' => $request->phone,
+      'Supplies needed' => trim($_GET['args']),
+    );
+    mc_post($url, $params);
+  }
 
   // attempt to create the request in the DB, handling the response codes that get returned
   // from create_request(Request)
@@ -139,14 +150,20 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
       log_response_sent($_GET['phone'], $response->id);
 
       if ($type == 'supplies') {
-        echo 'Supply needed: ' . get_supplies($response->phone) . '. ';
+        echo strtr($responses['aider_response_supplies'], array(
+          ':phone' => format_phone($response->phone),
+          ':address' => ucwords(strtolower($response->address)),
+          ':supplies' => get_supplies($response->phone),
+          ':type' => $type,
+        ));
       }
-
-      echo strtr($responses['aider_response'], array(
-        ':phone' => format_phone($response->phone),
-        ':address' => ucwords(strtolower($response->address)),
-        ':type' => $type,
-      ));
+      else {
+        echo strtr($responses['aider_response'], array(
+          ':phone' => format_phone($response->phone),
+          ':address' => ucwords(strtolower($response->address)),
+          ':type' => $type,
+        ));
+      }
     }
     // something went wrong!
     else {

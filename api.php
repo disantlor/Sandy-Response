@@ -109,9 +109,14 @@ function get_keyword() {
     ),
     'supplies' => array(
       'supplies',
+      'need',
+      'i need',
     ),
     'medical' => array(
       'medical',
+    ),
+    'repair' => array(
+      'repair',
     ),
     'pumping' => array(
       'pumping',
@@ -129,6 +134,9 @@ function get_keyword() {
     'firstaid' => array(
       'firstaid',
       'first aid',
+    ),
+    'building' => array(
+      'building',
     ),
   );
 
@@ -196,7 +204,7 @@ function get_supplies($phone) {
   }
 
   if (!empty($supplies)) {
-    return map_supplies($supplies);
+    return $supplies;
   }
   else {
     return FALSE;

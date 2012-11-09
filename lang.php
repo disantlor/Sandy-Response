@@ -11,6 +11,8 @@ $responses = array(
 
   'aider_response' => 'Location: :address (:phone). Reply YES to take responsibility for this address. It will be removed from the need list; only reply if you will definitely help within 24 hrs. Reply NEXT for another address instead.',
 
+  'aider_response_supplies' => 'Location: :address (:phone) needs :supplies. If these supplies are available at your distribution center, text YES to accept responsibility for this address or NEXT for the next need.',
+
   'aider_no_more_aidees' => 'You\'ve reached the end of this list. Reply NEXT to start over. Pls spread the word by having people in need text SANDY to 69866.',
 
   'aidee_new_request' => 'Your request has been recorded. We will try to send the next available volunteer to help you.',

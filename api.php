@@ -136,6 +136,7 @@ function get_keyword() {
       'first aid',
     ),
     'building' => array(
+      'builder',
       'building',
     ),
   );

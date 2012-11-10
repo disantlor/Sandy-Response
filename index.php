@@ -63,12 +63,7 @@ if (in_array(get_keyword(), $keywords['aidee'])) {
   $request->address = standardAddress(trim($_GET['profile_street_address']));
 
   if ($request->type == 'supplies') {
-    $url = 'https://secure.mcommons.com/api/profile_update';
-    $params = array(
-      'phone_number' => $request->phone,
-      'Supplies needed' => trim($_GET['args']),
-    );
-    mc_post($url, $params);
+  	$request->args = substr(trim($_GET['args']), 0, 140);
   }
 
   // attempt to create the request in the DB, handling the response codes that get returned
@@ -153,7 +148,7 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
         echo strtr($responses['aider_response_supplies'], array(
           ':phone' => format_phone($response->phone),
           ':address' => ucwords(strtolower($response->address)),
-          ':supplies' => get_supplies($response->phone),
+          ':supplies' => $response->args,
           ':type' => $type,
         ));
       }

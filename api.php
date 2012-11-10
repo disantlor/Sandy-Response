@@ -182,37 +182,6 @@ function mc_post($url, $fields) {
 }
 
 /**
- * Get the supplies needed by an aidee.
- *
- * @param string $phone
- * 
- * return string|bool needed supplies, FALSE if empty
- */
-function get_supplies($phone) {
-  $url = 'https://secure.mcommons.com/api/profile';
-  $params = array(
-    'phone_number' => $phone,
-  );
-
-  $supplies = '';
-  $data = mc_post($url, $params);
-
-  foreach ($data->profile->custom_columns->custom_column as $column) {
-    $attributes = $column->attributes();
-    if ($attributes['name'] == 'Supplies needed') {
-      $supplies = trim((string) $column);
-    }
-  }
-
-  if (!empty($supplies)) {
-    return $supplies;
-  }
-  else {
-    return FALSE;
-  }
-}
-
-/**
  * Map a user-inputted supply to a more peasant version
  *
  * @param string $supply

@@ -103,13 +103,14 @@ function request_exists($request) {
 function insert_request($request) {
   global $conn;
   $stmt = $conn->prepare('INSERT INTO requests
-    (type, phone, neighborhood, address)
-    VALUES(:type, :phone, :neighborhood, :address)');
+    (type, phone, neighborhood, address, args)
+    VALUES(:type, :phone, :neighborhood, :address, :args)');
   $stmt->execute(array(
     ':type' => $request->type,
     ':phone' => $request->phone,
     ':neighborhood' => $request->neighborhood,
     ':address' => $request->address,
+  	':args' => $request->args
   ));
 
   return $conn->lastInsertId();
@@ -299,6 +300,7 @@ class Request {
   public $phone;
   public $neighborhood;
   public $address;
+  public $args;
 
   public $helped;
   public $timestamp;

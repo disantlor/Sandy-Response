@@ -16,6 +16,8 @@ define('FLAG_SUCCESSFULLY_HELPING', 6);
 define('FLAG_RATE_LIMIT', 7);
 define('FLAG_NO_REQUEST_FOR_NUMBER', 8);
 
+define('ARGS_CHAR_LIMIT', 140);
+
 date_default_timezone_set('America/New_York');
 
 // if we don't have a valid API key, go away!
@@ -63,7 +65,7 @@ if (in_array(get_keyword(), $keywords['aidee'])) {
   $request->address = standardAddress(trim($_GET['profile_street_address']));
 
   if ($request->type == 'supplies') {
-  	$request->args = substr(trim($_GET['args']), 0, 140);
+  	$request->args = substr(trim($_GET['args']), 0, ARGS_CHAR_LIMIT);
   }
 
   // attempt to create the request in the DB, handling the response codes that get returned

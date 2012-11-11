@@ -230,7 +230,7 @@ function supply_map() {
  * @return bool
  */
 function is_supply_request() {
-  $arg = strtolower(trim($_GET['args']));
+  $arg = isset($_GET['args']) ? strtolower(trim($_GET['args'])) : '';
   foreach (supply_map() as $supply) {
     foreach ($supply as $response) {
       if (substr($arg, 0, strlen($response)) == $response) {

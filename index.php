@@ -94,7 +94,7 @@ else if (in_array(get_keyword(), $keywords['aider'])) {
   initialize_aider($_GET['phone']);
 
   // clean up the args
-  $arg = strtolower(trim($_GET['args']));
+  $arg = isset($_GET['args']) ? strtolower(trim($_GET['args'])) : '';
 
   // If they text something that's not next
   if (!empty($arg) && substr($arg, 0, 4) != 'next') {

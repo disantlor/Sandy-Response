@@ -1,2 +1,4 @@
 phpMyAdmin/*
-defs.php
+config/defs.php
+/lib/Zend
+*.DS_Store
